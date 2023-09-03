@@ -1,43 +1,69 @@
 require_relative "./list.rb"
 
 class TodoBoard
-    def initialize(label)
-        @list = List.new(label)
+    def initialize()
+        # hash = Hash.new()
+        # label.each {|ele| hash[ele] = List.new(ele)}
+        @board = Hash.new
+    end
+
+    def board
+        @board
     end
 
     def get_command
         print "\nEnter a command: "
         puts
         get = gets.chomp
-        cmd, *args = get.split(" ")
+        cmd, ls, *args = get.split(" ")
         nums = args.map {|ele| ele.to_i}
         
         case cmd
+        when "mklist"
+            @board[ls] = List.new(ls)
+            p @board
+            return true
+        when "ls"
+            print @board.keys
+            puts
+            return true
+        when "showall"
+            @board.each {|k, v| v.prints}
+            return true
         when "mktodo"
-            @list.add_item(*args)
+            @board[ls].add_item(*args)
             return true
         when "up"
-            @list.up(*nums)
+            @board[ls].up(*nums)
             return true
         when "down"
-            @list.down(*nums)
+            @board[ls].down(*nums)
             return true
         when "swap"
 
-            @list.swap(*nums)
+            @board[ls].swap(*nums)
             return true
         when "priority"
-            @list.print_priority 
+            @board[ls].print_priority 
             return true
         when "sort"
-            @list.sort_by_date!
+            @board[ls].sort_by_date!
             return true
         when "prints"
             if args.length > 0
-                @list.print_full_item(*nums)
+                @board[ls].print_full_item(*nums)
             else
-                @list.prints
+                @board[ls].prints
             end
+            return true
+        when "toggle"
+            @board[ls].toggle_item(*nums)
+            return true
+        when "rm"
+            @board[ls].remove_item(*nums)
+            return true
+        when "purge"
+            @board[ls].purge
             return true
         when "quit"
             return false
@@ -57,5 +83,5 @@ class TodoBoard
 
 end
 
-# my_board = TodoBoard.new('groceries')
-# my_board.run
+my_board = TodoBoard.new()
+my_board.run

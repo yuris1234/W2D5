@@ -47,21 +47,21 @@ class List
     end
 
     def prints
-        print "-" * 35
+        print "-" * 45
         puts
         print @label.rjust(23)
         puts
-        print "-" * 35
+        print "-" * 45
         puts
-        print "Index".ljust(5) + " | " + "Item".ljust(15) + " | " + "Deadline" 
+        print "Index".ljust(5) + " | " + "Item".ljust(15) + " | " + "Deadline".ljust(10) + "| " + "Done"
         puts
-        print "-" * 35
+        print "-" * 45
         puts
         @items.each_with_index do |item, idx|
-            print "#{idx.to_s.ljust(5)} | #{item.title.ljust(15)} | #{item.deadline}" 
+            print "#{idx.to_s.ljust(5)} | #{item.title.ljust(15)} | #{item.deadline.ljust(10)} | #{item.done}" 
             puts
         end
-        print "-" * 35
+        print "-" * 45
         puts 
     end
 
@@ -69,24 +69,24 @@ class List
         if !valid_index?(index)
             return
         end
-        print "-" * 35
+        print "-" * 45
         puts
-        print "#{@items[index].title.ljust(20)} + #{@items[index].deadline}"
+        print "#{@items[index].title.ljust(20)}  #{@items[index].deadline.ljust(10)} #{@items[index].done}"
         puts
         print "#{@items[index].description}"
         puts
-        print "-" * 35
+        print "-" * 45
         puts
     end
 
     def print_priority
-        print "-" * 35
+        print "-" * 45
         puts
-        print "#{@items[0].title.ljust(20)} + #{@items[0].deadline}"
+        print "#{@items[0].title.ljust(20)} #{@items[0].deadline.ljust(10)} #{@items[0].done}"
         puts
         print "#{@items[0].description}"
         puts
-        print "-" * 35
+        print "-" * 45
         puts
     end
 
@@ -119,6 +119,26 @@ class List
     def sort_by_date!
         @items.sort_by! {|item| item.deadline}
     end
+
+    def toggle_item(index)
+        @items[index].toggle
+    end
+
+    def remove_item(index) 
+        if !valid_index?(index)
+            return false
+        end
+        @items.delete_at(index)
+        @items.delete(nil)
+        true
+    end
+
+    def purge
+        done = @items.select {|item| item.done == true}
+        done_idx = @items.map {|item| @items.index(item)}
+        done_idx.each {|idx| @items.delete_at(idx)}
+        @items.delete(nil)
+    end
 end
 
 # my_list = List.new('Groceries')
@@ -130,12 +150,12 @@ end
 # my_list.print_full_item(3)
 # my_list.print_priority
 
-l = List.new('Groceries')
-l.add_item('cheese', '2019-10-25')
-l.add_item('toothpaste', '2019-10-25')
-l.add_item('shampoo', '2019-10-24')
-l.add_item('candy', '2019-10-31')
-# l.down(0)
+# l = List.new('Groceries')
+# l.add_item('cheese', '2019-10-25')
+# l.add_item('toothpaste', '2019-10-25')
+# l.add_item('shampoo', '2019-10-24')
+# l.add_item('candy', '2019-10-31')
+# # l.down(0)
 # l.down(0, 2)
 # l.up(3, 10)
 # p l.up(7, 3)

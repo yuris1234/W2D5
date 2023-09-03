@@ -16,13 +16,18 @@ class Item
         true
     end
 
-    def initialize(title, deadline, description)
+    def initialize(title, deadline, description, done=false)
         if !Item.valid_date?(deadline)
             raise ArgumentError.new("not a valid deadline")
         end
         @title = title
         @deadline = deadline
         @description = description 
+        @done = done
+    end
+
+    def done
+        @done
     end
 
     def deadline
@@ -36,8 +41,13 @@ class Item
         @deadline = str 
     end
 
-
-
+    def toggle
+        if @done == false
+            @done = true
+        else
+            @done = false
+        end
+    end
 end
 
 # p Item.valid_date?('2019-10-25') # true
