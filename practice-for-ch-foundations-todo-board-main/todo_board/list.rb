@@ -49,7 +49,7 @@ class List
     def prints
         print "-" * 35
         puts
-        print @label
+        print @label.rjust(23)
         puts
         print "-" * 35
         puts
@@ -64,6 +64,61 @@ class List
         print "-" * 35
         puts 
     end
+
+    def print_full_item(index)
+        if !valid_index?(index)
+            return
+        end
+        print "-" * 35
+        puts
+        print "#{@items[index].title.ljust(20)} + #{@items[index].deadline}"
+        puts
+        print "#{@items[index].description}"
+        puts
+        print "-" * 35
+        puts
+    end
+
+    def print_priority
+        print "-" * 35
+        puts
+        print "#{@items[0].title.ljust(20)} + #{@items[0].deadline}"
+        puts
+        print "#{@items[0].description}"
+        puts
+        print "-" * 35
+        puts
+    end
+
+    def up(index, amount=1)
+        if !valid_index?(index)
+            return false
+        end
+        amount.times do
+            if index > 0
+                @items[index], @items[index-1] = @items[index-1], @items[index]
+            index-=1
+            end
+        end
+        true
+    end
+
+    def down(index, amount=1)
+        if !valid_index?(index)
+            return false
+        end
+        amount.times do 
+            if index < @items.length - 1
+                @items[index], @items[index+1] = @items[index+1], @items[index]
+            index+=1
+            end
+        end
+        true
+    end
+
+    def sort_by_date!
+        @items.sort_by! {|item| item.deadline}
+    end
 end
 
 # my_list = List.new('Groceries')
@@ -72,3 +127,17 @@ end
 # my_list.add_item('shampoo', '2019-10-24')
 # my_list.add_item('candy', '2019-10-31', '4 bags should be enough')
 # my_list.prints
+# my_list.print_full_item(3)
+# my_list.print_priority
+
+l = List.new('Groceries')
+l.add_item('cheese', '2019-10-25')
+l.add_item('toothpaste', '2019-10-25')
+l.add_item('shampoo', '2019-10-24')
+l.add_item('candy', '2019-10-31')
+# l.down(0)
+# l.down(0, 2)
+# l.up(3, 10)
+# p l.up(7, 3)
+# l.sort_by_date!
+# l.prints
